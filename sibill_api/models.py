@@ -8,18 +8,22 @@ class Product(models.Model):
 
 
 class Invoice(models.Model):
-    street ="calle"
-    way = "camino"
-    avenue = "avenida"
+    date_invoice = models.DateField()
+    iva = models.DecimalField(max_digits=5, decimal_places=2, default="21")
+    products = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
+class User(models.Model):
+    street = "cl"
+    way = "cm"
+    avenue = "av"
     type_choices = [
         (street, "calle"),
         (way, "camino"),
         (avenue, "avenida"),
     ]
-
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
-    date_invoice = models.DateField(auto_now_add=True)
     dni = models.CharField(max_length=9)
     address = models.CharField(max_length=50)
     number = models.IntegerField()
@@ -30,5 +34,4 @@ class Invoice(models.Model):
     )
     location = models.CharField(max_length=30)
     province = models.CharField(max_length=30)
-    iva = models.DecimalField(max_digits=5, decimal_places=2)
-    products = models.ForeignKey(Product, on_delete=models.CASCADE)
+    invoices = models.ForeignKey(Invoice, on_delete=models.CASCADE)
