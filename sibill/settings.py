@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sibill_api',
 ]
 
 MIDDLEWARE = [
@@ -76,11 +77,11 @@ WSGI_APPLICATION = 'sibill.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'sibilldb',
         'USER': 'postgres',
         'PASSWORD': 'root',
-        'HOST':'127.0.0.1',
-        'DATA_BASE':'5432',
+        'HOST': '127.0.0.1',
+        'DATA_BASE': '5432',
 
     }
 }
