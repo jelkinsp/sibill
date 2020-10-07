@@ -13,7 +13,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ['date_invoice', 'iva', 'products']
+        fields = '__all__'
 
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
