@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 from rest_framework import status
@@ -17,15 +16,15 @@ def manage_invoice(request):
         try:
             user_invoice = User.objects.get(id=data['user_id'])
         except User.DoesNotExist:
-            return Response("User not exict", status=status.HTTP_404_NOT_FOUND)
+            return Response("User not exist", status=status.HTTP_404_NOT_FOUND)
+        total = 0
         try:
             for product in data["products"]:
-                Product.objects.get(id=product)
+                product_db = Product.objects.get(id=product)
+                total += product_db.price
         except Product.DoesNotExist:
-            return Response("Product  not exict", status=status.HTTP_404_NOT_FOUND)
-
-        serializer = InvoiceSerializer(data={"products": data["products"]})
-        # Falta coger el id de la factura y relacionarla con el Usuario
+            return Response("Product  not exist", status=status.HTTP_404_NOT_FOUND)
+        serializer = InvoiceSerializer(data={"products": data["products"], "total": total})
         if serializer.is_valid():
             serializer.save()
             user_invoice.invoices.add(serializer.data['id'])
@@ -35,7 +34,7 @@ def manage_invoice(request):
         try:
             invoice = Invoice.objects.get(id=data["id"])
         except Invoice.DoesNotExist:
-            return Response("Invoice not exict", status=status.HTTP_404_NOT_FOUND)
+            return Response("Invoice not exist", status=status.HTTP_404_NOT_FOUND)
         invoice.delete()
         return Response(status=200)
 
@@ -46,7 +45,7 @@ def get_invoice_id(request, invoice_id):
         try:
             invoice = Invoice.objects.get(id=invoice_id)
         except Invoice.DoesNotExist:
-            return Response("Invoice {} not exict".format(invoice_id), status=status.HTTP_404_NOT_FOUND)
+            return Response("Invoice {} not exist".format(invoice_id), status=status.HTTP_404_NOT_FOUND)
         serializer = InvoiceSerializer(invoice)
         return Response(serializer.data, status=200)
 
@@ -55,8 +54,15 @@ def get_invoice_id(request, invoice_id):
 def get_invoice_average(request, user_name, year_invoice):
     if request.method == 'GET':
         try:
-            invoice = Invoice.objects.filter(date_invoice__year=year_invoice, user__name=user_name)  # Query
+            invoice_query = Invoice.objects.filter(date_invoice__year=year_invoice, user__name=user_name)
         except Invoice.DoesNotExist:
-            return Response("Username or Year not exict", status=status.HTTP_404_NOT_FOUND)
-        serializer = InvoiceSerializer(invoice)
-        return Response(serializer.data, status=200)
+            return Response("Username or Year not exist", status=status.HTTP_404_NOT_FOUND)
+        total = 0
+        for invoice in invoice_query.all():
+            serializer = InvoiceSerializer(invoice)
+            total += float(serializer.data["total"])
+        total += total * float(invoice.iva) / 100
+
+        result = total / len(invoice_query.all())
+
+        return Response(result, status=200)

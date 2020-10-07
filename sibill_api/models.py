@@ -10,6 +10,7 @@ class Invoice(models.Model):
     id = models.AutoField(primary_key=True)
     date_invoice = models.DateField(auto_now_add=True)
     iva = models.DecimalField(max_digits=5, decimal_places=2, default="21")
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     products = models.ManyToManyField(Product)
 
 
