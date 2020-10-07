@@ -36,7 +36,7 @@ def manage_invoice(request):
         except Invoice.DoesNotExist:
             return Response("Invoice not exist", status=status.HTTP_404_NOT_FOUND)
         invoice.delete()
-        return Response(status=200)
+        return Response(status=202)
 
 
 @api_view(['GET'])
