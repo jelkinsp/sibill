@@ -9,9 +9,18 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
+    # products = ProductSerializer()
+
     class Meta:
         model = Invoice
         fields = ['date_invoice', 'iva', 'products']
+
+    # def create(self, validated_data):
+    #     products_data = validated_data.pop('products')
+    #
+    #     invoice = Invoice.objects.create(**validated_data)
+    #     Product.objects.create(invoice=invoice, **products_data)
+    #     return invoice
 
 
 class UserSerializer(serializers.ModelSerializer):

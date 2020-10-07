@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import invoice_list
+from .views import InvoiceAPIView
 
 urlpatterns = [
 
-    path('invoice/', invoice_list),
+    path('invoice/', InvoiceAPIView.as_view()),
+    path('invoice/<int:id>', InvoiceAPIView.as_view()),
 ]

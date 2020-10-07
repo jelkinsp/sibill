@@ -7,9 +7,10 @@ class Product(models.Model):
 
 
 class Invoice(models.Model):
-    date_invoice = models.DateField()
+    id = models.AutoField(primary_key=True)
+    date_invoice = models.DateField(auto_now_add=True)
     iva = models.DecimalField(max_digits=5, decimal_places=2, default="21")
-    products = models.ForeignKey(Product, on_delete=models.CASCADE())
+    products = models.ManyToManyField(Product)
 
 
 class User(models.Model):
@@ -33,4 +34,4 @@ class User(models.Model):
     )
     location = models.CharField(max_length=30)
     province = models.CharField(max_length=30)
-    invoices = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    invoices = models.ManyToManyField(Invoice)
