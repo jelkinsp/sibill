@@ -33,7 +33,7 @@ def manage_invoice(request):
         try:
             invoice = Invoice.objects.get(id=data["id"])
         except Invoice.DoesNotExist:
-            return Response("Invoice not exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Invoice not exist", status=status.HTTP_400_BAD_REQUEST)
         invoice.delete()
         return Response(status=202)
 
@@ -44,7 +44,7 @@ def get_invoice_id(request, invoice_id):
         try:
             invoice = Invoice.objects.get(id=invoice_id)
         except Invoice.DoesNotExist:
-            return Response("Invoice {} not exist".format(invoice_id), status=status.HTTP_404_NOT_FOUND)
+            return Response("Invoice {} not exist".format(invoice_id), status=status.HTTP_400_BAD_REQUEST)
         serializer = InvoiceSerializer(invoice)
         return Response(serializer.data, status=200)
 
@@ -55,7 +55,7 @@ def get_invoice_average(request, user_name, year_invoice):
         try:
             invoice_query = Invoice.objects.filter(date_invoice__year=year_invoice, user__name=user_name)
         except Invoice.DoesNotExist:
-            return Response("Username or Year not exist", status=status.HTTP_404_NOT_FOUND)
+            return Response("Username or Year not exist", status=status.HTTP_400_BAD_REQUEST)
         total = 0
         for invoice in invoice_query.all():
             serializer = InvoiceSerializer(invoice)
