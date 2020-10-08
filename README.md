@@ -1,7 +1,7 @@
 # Sibill
 Prueba Técnica que consiste en hacer una pequeña API Rest con Django
 
-* Version 1.1.0
+* Version 2.0.0
 
 ### Requisitos previos
 
