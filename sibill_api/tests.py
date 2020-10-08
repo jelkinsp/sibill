@@ -51,6 +51,11 @@ class InvoiceTest(TestCase):
         response = requests.request("DELETE", url, data=test_delete)
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
+
+class InvoiceTestError(TestCase):
+    def setUp(self):
+        pass
+
     def test_create_error(self):
         test_post = '{"user_id": 100, "products": [1, 2, 3, 4]}'
 
